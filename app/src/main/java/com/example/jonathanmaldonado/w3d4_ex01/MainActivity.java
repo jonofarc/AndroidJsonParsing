@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -19,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String BASE_URL ="https://randomuser.me/api";
 
     OkHttpClient client;
-    
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Request request = new Request.Builder().url("http://www.google.com").build();
+        Request request = new Request.Builder().url(BASE_URL).build();
 
         // thys is a Synchoronous request
         // this needs a separate thread
@@ -49,11 +53,26 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
+                      /*
                         if(response.isSuccessful()){
                             Log.d(TAG, "onResponse: "+ response.body().string());
                         }else{
                             Log.d(TAG, "onResponse: Application Error");
                         }
+                        */
+                        String resp= response.body().string();
+                        try {
+                            JSONObject result = new JSONObject(resp);
+                            JSONArray results= result.getJSONArray("results");
+                           // results.get(0)//object
+                          
+
+                            String myString=results.get(0).toString();
+                            Log.d(TAG, "onResponse: "+ myString);
+                        }catch (JSONException e){
+                            e.printStackTrace();
+                        }
+
                     }
                 }
         );

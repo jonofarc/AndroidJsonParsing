@@ -22,17 +22,12 @@
                app:srcCompat="@drawable/portrait_placeholder" />
 
            <TextView
-               android:id="@+id/tv_name"
+               android:id="@+id/tv_fullName"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:text="Hello World!"
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
-           <TextView
-               android:id="@+id/tv_lastName"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="Hello World!"
-               android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+
            <TextView
                android:id="@+id/tv_address"
                android:layout_width="wrap_content"
@@ -45,6 +40,11 @@
                android:layout_height="wrap_content"
                android:text="Hello World!"
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+           <Button
+               android:text="@string/btn_lbl_random_user"
+               android:onClick="getRandomUserBtn"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
 
        </LinearLayout>
 

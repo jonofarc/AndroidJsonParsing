@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,8 +37,7 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client;
     private List<Result> randomUserResults;
     private ImageView profilePictureIV;
-    private TextView nameTV;
-    private TextView lastNameTV;
+    private TextView fullNameTV;
     private TextView addressTV;
     private TextView emailTV;
 
@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         client = new OkHttpClient.Builder().build();
         randomUserResults = new ArrayList<>();
-        nameTV= (TextView) findViewById(R.id.tv_name);
-        lastNameTV= (TextView) findViewById(R.id.tv_lastName);
+        fullNameTV= (TextView) findViewById(R.id.tv_fullName);
         addressTV= (TextView) findViewById(R.id.tv_address);
         emailTV= (TextView) findViewById(R.id.tv_email);
         profilePictureIV= (ImageView) findViewById(R.id.iv_profilePicture);
@@ -61,11 +60,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        getRandomUser();
+    }
+
+    public void getRandomUserBtn(View view) {
+        getRandomUser();
+    }
+
+    public void getRandomUser() {
+
+
         Request request = new Request.Builder().url(BASE_URL).build();
 
         // thys is a Synchoronous request
         // this needs a separate thread
-       // Response response = client.newCall(request).execute();
+        // Response response = client.newCall(request).execute();
 
         client.newCall(request).enqueue(
                 new Callback() {
@@ -89,22 +98,33 @@ public class MainActivity extends AppCompatActivity {
                                 RandomUser randomUser = gson.fromJson(resp, RandomUser.class);
 
                                 randomUserResults= randomUser.getResults();
-                               // mainResultTV.setText(GResults.get(0).getName().toString());
+                                // mainResultTV.setText(GResults.get(0).getName().toString());
                                 for (int i = 0; i < randomUserResults.size(); i++) {
                                     final int currentRandomUserIndex=i;
                                     Log.d(TAG, "onResponse for: " + randomUserResults.get(currentRandomUserIndex).getName().getFirst().toString());
 
 
+                                    StringBuilder nameBuilder = new StringBuilder();
+                                    nameBuilder.append("Full Name: "+randomUserResults.get(currentRandomUserIndex).getName().getFirst().toString()+" "+randomUserResults.get(currentRandomUserIndex).getName().getLast().toString());
+                                    final String fullName = nameBuilder.toString();
+
                                     //build the user address
                                     StringBuilder addressBuilder = new StringBuilder();
+                                    addressBuilder.append("Address: ");
                                     addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getStreet()+" ");
                                     addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getCity()+" ");
                                     addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getState()+" ");
                                     addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getPostcode());
                                     final String fullAddress = addressBuilder.toString();
 
-                                    //retrieve the user picture
 
+
+                                    StringBuilder emailBuilder = new StringBuilder();
+                                    emailBuilder.append("Email: "+randomUserResults.get(currentRandomUserIndex).getEmail().toString());
+                                    final String fullEmail = emailBuilder.toString();
+
+
+                                    //retrieve the user picture
                                     URL url = new URL(randomUserResults.get(currentRandomUserIndex).getPicture().getLarge());
                                     final Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 
@@ -115,10 +135,9 @@ public class MainActivity extends AppCompatActivity {
                                         public void run() {
                                             // TODO Auto-generated method stub
                                             profilePictureIV.setImageBitmap(bmp);
-                                            nameTV.setText( randomUserResults.get(currentRandomUserIndex).getName().getFirst().toString());
-                                            lastNameTV.setText( randomUserResults.get(currentRandomUserIndex).getName().getLast().toString());
+                                            fullNameTV.setText( fullName);
                                             addressTV.setText( fullAddress);
-                                            emailTV.setText( randomUserResults.get(currentRandomUserIndex).getEmail());
+                                            emailTV.setText(fullEmail);
                                         }
                                     });
                                 } //end for GResults
@@ -146,11 +165,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+
+
+
     }
-
-
-
-
 
 
 }

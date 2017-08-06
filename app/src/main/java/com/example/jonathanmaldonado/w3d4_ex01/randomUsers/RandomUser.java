@@ -1,5 +1,5 @@
 
-package com.example.jonathanmaldonado.w3d4_ex01;
+package com.example.jonathanmaldonado.w3d4_ex01.randomUsers;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

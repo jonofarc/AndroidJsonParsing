@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">w3d4-ex01</string>
     <string name="btn_lbl_random_user">Random User</string>
+    <string name="lbl_field_no_blank">Field Cant be Blank</string>
+    <string name="lbl_add_alias">Add an alias for this user</string>
+    <string name="lbl_save_user">Save User</string>
+    <string name="lbl_search_user">Search User</string>
 </resources>

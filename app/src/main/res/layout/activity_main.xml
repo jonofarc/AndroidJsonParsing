@@ -40,11 +40,32 @@
                android:layout_height="wrap_content"
                android:text="Hello World!"
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
+           <EditText
+               android:id="@+id/et_alias"
+               android:hint="@string/lbl_add_alias"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <Button
+               android:text="@string/lbl_save_user"
+               android:onClick="saveUser"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
+           <Button
+               android:text="@string/lbl_search_user"
+               android:onClick="searchUser"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content" />
            <Button
                android:text="@string/btn_lbl_random_user"
                android:onClick="getRandomUserBtn"
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
+           <TextView
+               android:id="@+id/tv_alerts"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Hello World!"
+               android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
        </LinearLayout>
 

@@ -1,22 +1,26 @@
 package com.example.jonathanmaldonado.w3d4_ex01;
 
-import android.app.DownloadManager;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.jonathanmaldonado.w3d4_ex01.DataBase.DBHelper;
+import com.example.jonathanmaldonado.w3d4_ex01.DataBase.FeedReaderContract;
+import com.example.jonathanmaldonado.w3d4_ex01.randomUsers.RandomUser;
+import com.example.jonathanmaldonado.w3d4_ex01.randomUsers.Result;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,14 +36,24 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName()+"_TAG";
+    public static final String MAIN_ACTIVITY_EXTRA="com.example.jonathanmaldonado.w3d4_ex01.MAIN_ACTIVITY_EXTRA";
     private static final String BASE_URL ="https://randomuser.me/api";
+
+    private DBHelper helper;
+    private SQLiteDatabase database;
 
     OkHttpClient client;
     private List<Result> randomUserResults;
     private ImageView profilePictureIV;
+    private EditText aliasET;
     private TextView fullNameTV;
     private TextView addressTV;
     private TextView emailTV;
+    private TextView alertTV;
+    private String pictureURL;
+    private String originalFullName;
+    private String originalAddress;
+    private String originalEmail;
 
 
 
@@ -48,12 +62,18 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        helper = new DBHelper(this);
+        database = helper.getWritableDatabase();
+
+
         client = new OkHttpClient.Builder().build();
         randomUserResults = new ArrayList<>();
+        aliasET= (EditText) findViewById(R.id.et_alias);
         fullNameTV= (TextView) findViewById(R.id.tv_fullName);
         addressTV= (TextView) findViewById(R.id.tv_address);
         emailTV= (TextView) findViewById(R.id.tv_email);
         profilePictureIV= (ImageView) findViewById(R.id.iv_profilePicture);
+        alertTV= (TextView) findViewById(R.id.tv_alerts);
 
     }
 
@@ -127,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                     //retrieve the user picture
                                     URL url = new URL(randomUserResults.get(currentRandomUserIndex).getPicture().getLarge());
                                     final Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-
+                                    pictureURL=url.toString();
 
 
                                     runOnUiThread(new Runnable() {
@@ -140,6 +160,28 @@ public class MainActivity extends AppCompatActivity {
                                             emailTV.setText(fullEmail);
                                         }
                                     });
+
+
+                                    nameBuilder = new StringBuilder();
+                                    nameBuilder.append(randomUserResults.get(currentRandomUserIndex).getName().getFirst().toString()+" "+randomUserResults.get(currentRandomUserIndex).getName().getLast().toString());
+
+
+                                    //build the user address
+                                    addressBuilder = new StringBuilder();
+                                    addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getStreet()+" ");
+                                    addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getCity()+" ");
+                                    addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getState()+" ");
+                                    addressBuilder.append(randomUserResults.get(currentRandomUserIndex).getLocation().getPostcode());
+
+
+
+
+
+
+                                    originalFullName=nameBuilder.toString();
+                                    originalAddress=addressBuilder.toString();
+                                    originalEmail=randomUserResults.get(currentRandomUserIndex).getEmail().toString();
+
                                 } //end for GResults
 
 
@@ -170,5 +212,54 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void saveRandomUser(){
 
+        if(TextUtils.isEmpty(aliasET.getText().toString())){
+
+            //Error Message
+            //alertTV.setText("");
+            alertTV.setText(R.string.lbl_field_no_blank);
+
+        }else{
+
+            String alias= aliasET.getText().toString();
+
+
+            ContentValues values= new ContentValues();
+            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ALIAS,alias);
+            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_FULL_NAME,originalFullName);
+            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ADDRESS,originalAddress);
+            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_EMAIL,originalEmail);
+            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_PICTURE_URL,pictureURL);
+            long recordId = database.insert(FeedReaderContract.FeedEntry.TABLE_NAME,null,values);
+            if (recordId>0){
+                // Log.d(TAG, "Record Saved");
+                //show if save was succesfull
+              //  saveNoteResult.setText("");
+                alertTV.setText("User Saved: "+" \nAlias: "+ alias+" \nName: "+ originalFullName+ " \nAddress: "+ originalAddress+" \nEmail: "+ originalEmail+ " \nPictureURL: "+ pictureURL);
+
+            }
+
+
+        }
+
+
+
+
+
+    }
+
+
+    public void saveUser(View view) {
+        saveRandomUser();
+    }
+
+    public void searchUser(View view) {
+        Intent intent = new Intent(MainActivity.this , SearchActivity.class);
+        if(!TextUtils.isEmpty(aliasET.getText().toString())) {
+            intent.putExtra(MAIN_ACTIVITY_EXTRA, aliasET.getText().toString());
+        }
+
+        startActivity(intent);
+    }
 }

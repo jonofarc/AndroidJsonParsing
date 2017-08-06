@@ -22,6 +22,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -50,10 +52,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView addressTV;
     private TextView emailTV;
     private TextView alertTV;
-    private String pictureURL;
+    private String pictureImage;
     private String originalFullName;
     private String originalAddress;
     private String originalEmail;
+    private Bitmap ImageBitMap;
 
 
 
@@ -80,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getRandomUser();
+       // getRandomUser();
     }
 
     public void getRandomUserBtn(View view) {
@@ -147,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
                                     //retrieve the user picture
                                     URL url = new URL(randomUserResults.get(currentRandomUserIndex).getPicture().getLarge());
                                     final Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                    pictureURL=url.toString();
-
+                                    pictureImage=url.toString();
+                                    ImageBitMap=bmp;
 
                                     runOnUiThread(new Runnable() {
                                         @Override
@@ -222,6 +225,9 @@ public class MainActivity extends AppCompatActivity {
 
         }else{
 
+
+            byte[] imageBitsArray=getBytes(ImageBitMap);
+
             String alias= aliasET.getText().toString();
 
 
@@ -230,13 +236,13 @@ public class MainActivity extends AppCompatActivity {
             values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_FULL_NAME,originalFullName);
             values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_ADDRESS,originalAddress);
             values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_EMAIL,originalEmail);
-            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_PICTURE_URL,pictureURL);
+            values.put(FeedReaderContract.FeedEntry.COLUMN_NAME_PICTURE_IMAGE,imageBitsArray);
             long recordId = database.insert(FeedReaderContract.FeedEntry.TABLE_NAME,null,values);
             if (recordId>0){
                 // Log.d(TAG, "Record Saved");
                 //show if save was succesfull
               //  saveNoteResult.setText("");
-                alertTV.setText("User Saved: "+" \nAlias: "+ alias+" \nName: "+ originalFullName+ " \nAddress: "+ originalAddress+" \nEmail: "+ originalEmail+ " \nPictureURL: "+ pictureURL);
+                alertTV.setText("User Saved: "+" \nAlias: "+ alias+" \nName: "+ originalFullName+ " \nAddress: "+ originalAddress+" \nEmail: "+ originalEmail+ " \npictureImage: "+ pictureImage);
 
             }
 
@@ -261,5 +267,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
+    }
+
+    // convert from bitmap to byte array
+    public static byte[] getBytes(Bitmap bitmap) {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
     }
 }

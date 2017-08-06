@@ -25,7 +25,8 @@ public final class FeedReaderContract {
         public static String COLUMN_NAME_FULL_NAME = "fullName";
         public static final String COLUMN_NAME_ADDRESS="address";
         public static final String COLUMN_NAME_EMAIL="email";
-        public static final String COLUMN_NAME_PICTURE_URL="PictureURL";
+        public static final String COLUMN_NAME_PICTURE_IMAGE="PictureURL";
+
     }
 
 }

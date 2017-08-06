@@ -12,7 +12,7 @@ import com.example.jonathanmaldonado.w3d4_ex01.DataBase.FeedReaderContract.FeedE
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final int DATABASE_VERSION =6;
+    public static final int DATABASE_VERSION =7;
     public static final String DATABASE_NAME="mydatabase.db";
 
     public static  final String SQL_CREATE_ENTRIES = "CREATE TABLE "+
@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper {
             FeedEntry.COLUMN_NAME_FULL_NAME+" TEXT,"+
             FeedEntry.COLUMN_NAME_ADDRESS+" TEXT,"+
             FeedEntry.COLUMN_NAME_EMAIL+" TEXT,"+
-            FeedEntry.COLUMN_NAME_PICTURE_URL+" TEXT)";
+            FeedEntry.COLUMN_NAME_PICTURE_IMAGE+" BLOB)";
 
     public static final String SQL_DELETE_ENTRIES= "DROP TABLE IF EXISTS "+ FeedEntry.TABLE_NAME;
 

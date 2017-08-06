@@ -25,23 +25,24 @@
                android:id="@+id/tv_fullName"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="Hello World!"
+               android:text=""
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
            <TextView
                android:id="@+id/tv_address"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="Hello World!"
+               android:text=""
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
            <TextView
                android:id="@+id/tv_email"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="Hello World!"
+               android:text=""
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
            <EditText
                android:id="@+id/et_alias"
+               android:autofillHints="Enter an Alias "
                android:hint="@string/lbl_add_alias"
                android:layout_width="match_parent"
                android:layout_height="wrap_content" />
@@ -64,7 +65,7 @@
                android:id="@+id/tv_alerts"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:text="Hello World!"
+               android:text=""
                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
        </LinearLayout>

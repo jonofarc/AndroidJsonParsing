@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
         profilePictureIV= (ImageView) findViewById(R.id.iv_profilePicture);
         alertTV= (TextView) findViewById(R.id.tv_alerts);
 
+        getRandomUser();
     }
 
     @Override

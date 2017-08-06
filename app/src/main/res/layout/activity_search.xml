@@ -13,39 +13,11 @@
         android:layout_height="wrap_content">
         <LinearLayout
             android:orientation="vertical"
+            android:id="@+id/searchActivityLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iv_searchProfilePicture"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                app:srcCompat="@drawable/portrait_placeholder" />
-            <TextView
-                android:id="@+id/tv_searchAlias"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
-            <TextView
-                android:id="@+id/tv_searchFullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
 
-            <TextView
-                android:id="@+id/tv_searchAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
-            <TextView
-                android:id="@+id/tv_searchEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!"
-                android:textAppearance="@android:style/TextAppearance.DeviceDefault.Large" />
             <TextView
                 android:id="@+id/tv_searchAlerts"
                 android:layout_width="wrap_content"
